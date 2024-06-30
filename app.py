@@ -3,6 +3,7 @@ load_dotenv(find_dotenv())
 import requests
 import os
 import streamlit as st
+from PIL import Image
 HUGGINGFACEHUB_API_TOKEN=os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
 API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
@@ -30,6 +31,17 @@ def text2speach(text):
                 print(f"An error occurred: {e}")
 
  
+def imgResize(name):
+    
+    this_image = Image.open(f"data/{name}")
+    width, height = this_image.size
+    TARGET_WIDTH = 500
+    coefficient = width / 500
+    new_height = height / coefficient
+    this_image = this_image.resize((int(TARGET_WIDTH),int(new_height)),Image.Resampling.LANCZOS)
+    this_image.save(f"data/{name}",quality=50)
+
+         
 
     
 def main():
@@ -42,6 +54,7 @@ def main():
             bytes_data=uploaded_file.getvalue()
             with open(f"data/{uploaded_file.name}","wb") as file:
                 file.write(bytes_data)
+            imgResize(uploaded_file.name)
             st.image(uploaded_file,caption="uploaded image.",use_column_width=True)
             story=image2text(f"data/{uploaded_file.name}")
             text=story[0]["generated_text"]
