@@ -1,8 +1,4 @@
 from dotenv import find_dotenv,load_dotenv
-from langchain_huggingface import HuggingFaceEndpoint
-from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-parser = StrOutputParser()
 load_dotenv(find_dotenv())
 import requests
 import os
