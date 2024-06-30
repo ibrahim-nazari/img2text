@@ -24,7 +24,7 @@ def text2speach(text):
             API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
             headers = {"Authorization": f"Bearer {HUGGINGFACEHUB_API_TOKEN}"}
             response = requests.post(API_URL, headers=headers, json={"inputs":text})
-            with open("audio.flac","wb") as file:
+            with open("data/audio.flac","wb") as file:
                 file.write(response.content)
         except Exception as e:
                 print(f"An error occurred: {e}")
@@ -40,15 +40,15 @@ def main():
      if uploaded_file is not None:
             print(uploaded_file)
             bytes_data=uploaded_file.getvalue()
-            with open(uploaded_file.name,"wb") as file:
+            with open(f"data/{uploaded_file.name}","wb") as file:
                 file.write(bytes_data)
             st.image(uploaded_file,caption="uploaded image.",use_column_width=True)
-            story=image2text(uploaded_file.name)
+            story=image2text(f"data/{uploaded_file.name}")
             text=story[0]["generated_text"]
             text2speach(text)
-            with st.expander("Story"):
+            with st.expander("Text interpretation"):
                  st.write(text)
-            st.audio("audio.flac")
+            st.audio(f"data/audio.flac")
 
 
 
